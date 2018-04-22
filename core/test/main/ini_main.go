@@ -25,7 +25,7 @@ func main() {
 }
 
 func testIni() {
-    cfg := core.NewConfigIni("src/github.com/umeframework/gear/core/test/main/sample.ini")
+    cfg := core.NewIniConfig("src/github.com/umeframework/gear/core/test/main/sample.ini")
     fmt.Println(cfg.ParagraphSet())
     fmt.Println(cfg.Paragraph("JDBC basic"))
 }

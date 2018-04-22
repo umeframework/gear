@@ -10,7 +10,7 @@ import (
 )
 
 // 属性文件内容存贮结构
-type ConfigProperties struct {
+type PropertyConfig struct {
     // 文件名
     file     string
     // 内容
@@ -19,8 +19,8 @@ type ConfigProperties struct {
 }
 
 // 创建配置对象
-func NewConfigProperties(file string) *ConfigProperties {
-    cfg := new(ConfigProperties)
+func NewPropertyConfig(file string) *PropertyConfig {
+    cfg := new(PropertyConfig)
     cfg.contents = make(map[string]string)
     cfg.file = file
     cfg.sync = &sync.Mutex {}
@@ -29,7 +29,7 @@ func NewConfigProperties(file string) *ConfigProperties {
 }
 
 // 内容加载
-func (this *ConfigProperties) Load() {
+func (this *PropertyConfig) Load() {
     this.sync.Lock()
     defer this.sync.Unlock()
 
@@ -62,7 +62,7 @@ func (this *ConfigProperties) Load() {
 }
 
 // 返回Key集合
-func (this *ConfigProperties) KeySet() []string {
+func (this *PropertyConfig) KeySet() []string {
     var keys []string
     for key := range this.contents {
         keys = append(keys, key)
@@ -71,22 +71,22 @@ func (this *ConfigProperties) KeySet() []string {
 }
 
 // 读取文本值
-func (this *ConfigProperties) Get(name string) string {
+func (this *PropertyConfig) Get(name string) string {
     return this.contents[name]
 }
 
 // 设置文本值（暂不支持文件保存）
-func (this *ConfigProperties) Set(key string, value string) {
+func (this *PropertyConfig) Set(key string, value string) {
     this.contents[key] = value
 }
 
 // 移除（暂不支持文件保存）
-func (this *ConfigProperties) Remove(key string) {
+func (this *PropertyConfig) Remove(key string) {
     delete(this.contents, key)
 }
 
 // 读取文本值列表
-func (this *ConfigProperties) GetList(key string) []string {
+func (this *PropertyConfig) GetList(key string) []string {
     value :=  this.Get(key)
     if value == "" {
         return nil
@@ -96,13 +96,13 @@ func (this *ConfigProperties) GetList(key string) []string {
 }
 
 // 读取整数值
-func (this *ConfigProperties) GetInt(key string) (int,error ) {
+func (this *PropertyConfig) GetInt(key string) (int,error ) {
    s := this.Get(key)
    return strconv.Atoi(s)
 }
 
 // 读取整数值列表
-func (this *ConfigProperties) GetIntList(key string) ([]int) {
+func (this *PropertyConfig) GetIntList(key string) ([]int) {
     strValues := this.GetList(key)
     var intValues []int
     for _, s := range strValues {

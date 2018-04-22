@@ -10,7 +10,7 @@ import (_ "github.com/go-sql-driver/mysql")
 import (. "github.com/umeframework/gear/test/dto")
 
 func main() {
-    cfg := core.NewConfigProperties("src/github.com/umeframework/gear/config/gear.properties")
+    cfg := core.NewPropertyConfig("src/github.com/umeframework/gear/config/gear.properties")
     driver := cfg.Get("ume.gdbc.driver")
     url := cfg.Get("ume.gdbc.url")
     username := cfg.Get("ume.gdbc.username")
