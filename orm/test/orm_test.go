@@ -1,4 +1,4 @@
-package main
+package test
 
 import (
     "fmt"
@@ -7,10 +7,13 @@ import (
     "github.com/umeframework/gear/orm"
 )
 import (_ "github.com/go-sql-driver/mysql")
-import (. "github.com/umeframework/gear/test/dto")
+import (. "github.com/umeframework/gear/orm/test/dto"
+    "testing"
+)
 
-func main() {
-    cfg := core.NewPropertyConfig("src/github.com/umeframework/gear/config/gear.properties")
+func TestOrm(t *testing.T) {
+    //cfg := core.NewPropertyConfig("../../config/gear.properties")
+    cfg := core.NewPropertyConfig("gear.properties")
     driver := cfg.Get("ume.gdbc.driver")
     url := cfg.Get("ume.gdbc.url")
     username := cfg.Get("ume.gdbc.username")
@@ -20,9 +23,9 @@ func main() {
     defer ctx.Close()
 
     // 测试
-    TestSql()
+    testSql()
     //TestQuery(ctx)
-    TestUpdate(ctx)
+    testUpdate(ctx)
     fmt.Println("End test")
 
 }
@@ -30,7 +33,7 @@ func main() {
 
 
 // 测试
-func TestSql() {
+func testSql() {
     e := AlbumEntity{}
     em := orm.GetEntityMetadata(&e)
     fmt.Println(em.SQLSelectDefault)
@@ -42,7 +45,7 @@ func TestSql() {
 
 }
 
-func TestQuery(ctx orm.OrmContext) {
+func testQuery(ctx orm.OrmContext) {
     e := &AlbumEntity{}
     fmt.Println("@Entity查询")
     fmt.Println("Total:", e.Count(ctx))
@@ -53,7 +56,7 @@ func TestQuery(ctx orm.OrmContext) {
 }
 
 // 测试
-func TestUpdate(ctx orm.OrmContext) {
+func testUpdate(ctx orm.OrmContext) {
     fmt.Println("查询Id为999的记录集")
     // 定义查询参数，AlbumEntity的Id为999，其余字段为空
     e := new(AlbumEntity)
