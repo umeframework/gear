@@ -2,14 +2,12 @@ package test
 
 import (
     "fmt"
-)
-import (_ "github.com/go-sql-driver/mysql"
-    "github.com/umeframework/gear/core"
     "testing"
 )
+import (. "github.com/umeframework/gear/core")
 
 func TestIni(t *testing.T) {
-    cfg := core.NewIniConfig("sample.ini")
+    cfg := NewIniConfig("sample.ini")
     fmt.Println(cfg.ParagraphSet())
     fmt.Println(cfg.Paragraph("JDBC basic"))
 }

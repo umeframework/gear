@@ -4,11 +4,11 @@ import (
     "fmt"
     "database/sql"
     "github.com/umeframework/gear/core"
-    "github.com/umeframework/gear/orm"
 )
 import (_ "github.com/go-sql-driver/mysql")
 import (. "github.com/umeframework/gear/orm/test/dto"
     "testing"
+    "github.com/umeframework/gear/orm"
 )
 
 func TestOrm(t *testing.T) {
