@@ -14,6 +14,7 @@ type Key interface{}
 // Value stands for types of value used in properties.
 type Value interface{}
 
+// Properties stands for simple key-value properties
 type Properties interface {
 	GetProp(key Key) (Value, bool)
 	SetProp(key Key, value Value)
@@ -22,10 +23,12 @@ type Properties interface {
 	GetProps() []Key
 }
 
+// Reader interface reads (serializes) Properties from io.Reader
 type Reader interface {
 	Read(p Properties, r io.Reader) error
 }
 
+// Writer interface writes (deserializes) Properties to io.Writer
 type Writer interface {
 	Write(p Properties, w io.Writer) error
 }

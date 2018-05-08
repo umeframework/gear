@@ -27,6 +27,10 @@ var (
 type PropertiesReader struct {
 }
 
+func NewReader() Reader {
+	return &PropertiesReader{}
+}
+
 // Read() reads (deserialize) a Properties object from reader in properties file format.
 // It reads each valid line to props.
 func (pr *PropertiesReader) Read(p Properties, r io.Reader) error {

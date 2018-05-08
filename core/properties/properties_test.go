@@ -69,4 +69,3 @@ func TestPropertiesImpl_Props(t *testing.T) {
 		t.Errorf("failed to clear props")
 	}
 }
-

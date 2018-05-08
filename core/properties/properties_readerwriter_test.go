@@ -16,7 +16,7 @@ import (
 
 func TestPropertiesWriter(t *testing.T) {
 	// Create properties
-	data := map[string]interface{}{
+	data := map[Key]Value{
 		"boot.timeout": 30,
 		"boot.default": `multi(0)disk(0)rdisk(0)partition(1)\WINNT`,
 
@@ -25,8 +25,19 @@ func TestPropertiesWriter(t *testing.T) {
 		`複雑な設定`: "a\\b\u0000 A\t\r\n ;#=:",
 	}
 	p := New()
-	for key, value := range data {
-		p.SetProp(key, value)
+	ToProperties(p, data)
+
+	// Test utility functions
+	data2 := make(map[Key]Value)
+	ToMap(data2, p)
+	if len(data) != len(data2) {
+		t.Errorf("lengths are different. original = %v, new = %v", len(data), len(data2))
+	} else {
+		for key, value := range data {
+			if value2, ok := data2[key]; value != value2 || !ok {
+				t.Errorf("values are different. key = %v, original = %v, new = %v, found = %v", key, value, value2, ok)
+			}
+		}
 	}
 
 	// Write to file
@@ -44,7 +55,7 @@ func TestPropertiesWriter(t *testing.T) {
 		}
 		defer file.Close()
 
-		writer := &PropertiesWriter{}
+		writer := NewWriter()
 		if err := writer.Write(p, file); err != nil {
 			t.Fatalf("failed to save to ini file (%s). %v", filePath, err)
 		}
@@ -58,7 +69,7 @@ func TestPropertiesWriter(t *testing.T) {
 		}
 		defer file.Close()
 
-		reader := &PropertiesReader{}
+		reader := NewReader()
 		p2 := New()
 		if err := reader.Read(p2, file); err != nil {
 			t.Errorf("failed to read file %v. %v", filePath, err)
@@ -80,7 +91,7 @@ func TestPropertiesReader_Invalid(t *testing.T) {
 			}
 			defer file.Close()
 
-			reader := &PropertiesReader{}
+			reader := NewReader()
 			p2 := New()
 			if err := reader.Read(p2, file); err == nil {
 				t.Errorf("incorrectly read invalid file %v. %v", filePath, p2)
@@ -97,7 +108,7 @@ func TestPropertiesReader_Extended(t *testing.T) {
 		}
 		defer file.Close()
 
-		reader := &PropertiesReader{}
+		reader := NewReader()
 		p2 := New()
 		if err := reader.Read(p2, file); err != nil {
 			t.Errorf("failed to read invalid file %v. %v", filePath, err)

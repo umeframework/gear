@@ -6,7 +6,7 @@
 
 package properties
 
-func MergeToPropertyBag(target Properties, source map[Key]Value) {
+func ToProperties(target Properties, source map[Key]Value) {
 	if target != nil && source != nil {
 		for key, value := range source {
 			target.SetProp(key, value)
@@ -14,7 +14,7 @@ func MergeToPropertyBag(target Properties, source map[Key]Value) {
 	}
 }
 
-func MergeToMap(target map[Key]Value, source Properties) {
+func ToMap(target map[Key]Value, source Properties) {
 	if target != nil && source != nil {
 		keys := source.GetProps()
 		for _, key := range keys {

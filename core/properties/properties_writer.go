@@ -21,6 +21,10 @@ var (
 type PropertiesWriter struct {
 }
 
+func NewWriter() Writer {
+	return &PropertiesWriter{}
+}
+
 // Write() writes a Properties object to writer in ini file format.
 // Properties.Props will be written as key-value pairs.
 func (pw *PropertiesWriter) Write(p Properties, w io.Writer) error {
