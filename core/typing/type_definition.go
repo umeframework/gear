@@ -7,7 +7,7 @@
 package typing
 
 import (
-	"github.com/wingsweaver/gear/core/properties"
+	"github.com/umeframework/gear/core/properties"
 	"reflect"
 	"sync"
 )
@@ -18,7 +18,7 @@ var (
 )
 
 type typeDefinition struct {
-	properties.PropertyBag
+	properties.Properties
 	t            reflect.Type
 	createMethod CreateInstanceMethod
 }
@@ -43,16 +43,16 @@ func Register(name string, t reflect.Type) TypeDefinition {
 
 func RegisterEx(name string, t reflect.Type, createMethod CreateInstanceMethod, param TypeDefinitionParam) TypeDefinition {
 	typeDef := typeDefinition{
-		PropertyBag:  properties.NewPropertyBag(),
+		Properties:   properties.New(),
 		t:            t,
 		createMethod: createMethod,
 	}
-	properties.MergeToPropertyBag(&typeDef, param)
+	properties.ToProperties(typeDef.Properties, param)
 
 	typeDefDictMutex.Lock()
 	defer typeDefDictMutex.Unlock()
-	typeDefDict[name] = &typeDef
 
+	typeDefDict[name] = &typeDef
 	return &typeDef
 }
 
