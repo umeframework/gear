@@ -10,12 +10,12 @@ import (
 	"container/list"
 )
 
-type LinkedList struct {
+type linkedList struct {
 	innerList *list.List
 }
 
 func NewLinkedList() List {
-	ll := LinkedList{
+	ll := linkedList{
 		innerList: list.New(),
 	}
 	return &ll
@@ -36,7 +36,7 @@ func (iter *linkedListIterator) Next() Element {
 }
 
 func (iter *linkedListIterator) HasPrev() bool {
-	return iter.element != nil && iter.element.Prev() != nil
+	return iter.element != nil
 }
 
 func (iter *linkedListIterator) Prev() Element {
@@ -45,29 +45,29 @@ func (iter *linkedListIterator) Prev() Element {
 	return valule
 }
 
-func (ll *LinkedList) GetIterator() Iterator {
+func (ll *linkedList) GetIterator() Iterator {
 	iter := linkedListIterator{
 		element: ll.innerList.Front(),
 	}
 	return &iter
 }
 
-func (ll *LinkedList) GetPrevIterator() PrevIterator {
+func (ll *linkedList) GetPrevIterator() PrevIterator {
 	iter := linkedListIterator{
 		element: ll.innerList.Back(),
 	}
 	return &iter
 }
 
-func (ll *LinkedList) IsEmpty() bool {
+func (ll *linkedList) IsEmpty() bool {
 	return ll.innerList.Len() < 1
 }
 
-func (ll *LinkedList) Add(e Element) {
+func (ll *linkedList) Add(e Element) {
 	ll.innerList.PushBack(e)
 }
 
-func (ll *LinkedList) AddAll(iter Iterable) {
+func (ll *linkedList) AddAll(iter Iterable) {
 	if iter != nil {
 		for it := iter.GetIterator(); it.HasNext(); {
 			e := it.Next()
@@ -76,29 +76,31 @@ func (ll *LinkedList) AddAll(iter Iterable) {
 	}
 }
 
-func (ll *LinkedList) Clear() {
+func (ll *linkedList) Clear() {
 	ll.innerList = ll.innerList.Init()
 }
 
-func (ll *LinkedList) Contains(e Element) bool {
+func (ll *linkedList) Contains(e Element) bool {
 	return ll.ContainsIf(func(elem Element, param interface{}) bool {
 		return elem == param
 	}, e)
 }
 
-func (ll *LinkedList) ContainsAll(iter Iterable) bool {
+func (ll *linkedList) ContainsAll(iter Iterable) bool {
 	exists := true
-	for it := iter.GetIterator(); it.HasNext(); {
-		elem := it.Next()
-		if !ll.Contains(elem) {
-			exists = false
-			break
+	if iter != nil {
+		for it := iter.GetIterator(); it.HasNext(); {
+			elem := it.Next()
+			if !ll.Contains(elem) {
+				exists = false
+				break
+			}
 		}
 	}
 	return exists
 }
 
-func (ll *LinkedList) ContainsIf(matchMethod MatchMethod, param interface{}) bool {
+func (ll *linkedList) ContainsIf(matchMethod MatchMethod, param interface{}) bool {
 	exists := false
 	for elem := ll.innerList.Front(); elem != nil; elem = elem.Next() {
 		if matchMethod(elem.Value, param) {
@@ -109,22 +111,24 @@ func (ll *LinkedList) ContainsIf(matchMethod MatchMethod, param interface{}) boo
 	return exists
 }
 
-func (ll *LinkedList) Remove(e Element) {
+func (ll *linkedList) Remove(e Element) {
 	ll.RemoveIf(func(elem Element, param interface{}) bool {
 		return elem == param
 	}, e)
 }
 
-func (ll *LinkedList) RemoveAll(iter Iterable) {
-	ll.RemoveIf(func(elem Element, param interface{}) bool {
-		if it, ok := param.(Iterable); ok {
-			return Contains(it, elem)
-		}
-		return false
-	}, iter)
+func (ll *linkedList) RemoveAll(iter Iterable) {
+	if iter != nil {
+		ll.RemoveIf(func(elem Element, param interface{}) bool {
+			if it, ok := param.(Iterable); ok {
+				return Contains(it, elem)
+			}
+			return false
+		}, iter)
+	}
 }
 
-func (ll *LinkedList) RemoveIf(matchMethod MatchMethod, param interface{}) {
+func (ll *linkedList) RemoveIf(matchMethod MatchMethod, param interface{}) {
 	for it := ll.innerList.Front(); it != nil; {
 		next := it.Next()
 		if matchMethod(it.Value, param) {
@@ -134,11 +138,11 @@ func (ll *LinkedList) RemoveIf(matchMethod MatchMethod, param interface{}) {
 	}
 }
 
-func (ll *LinkedList) Size() int {
+func (ll *linkedList) Size() int {
 	return ll.innerList.Len()
 }
 
-func (ll *LinkedList) indexToElement(index int) (*list.Element, bool) {
+func (ll *linkedList) indexToElement(index int) (*list.Element, bool) {
 	var elem *list.Element = nil
 	var ok = false
 
@@ -146,7 +150,7 @@ func (ll *LinkedList) indexToElement(index int) (*list.Element, bool) {
 	if index >= 0 && index < count {
 		i := 0
 		elem = ll.innerList.Front()
-		for ; i < index && elem != nil; {
+		for i < index && elem != nil {
 			i++
 			elem = elem.Next()
 		}
@@ -156,7 +160,7 @@ func (ll *LinkedList) indexToElement(index int) (*list.Element, bool) {
 	return elem, ok
 }
 
-func (ll *LinkedList) AddAt(index int, e Element) {
+func (ll *linkedList) AddAt(index int, e Element) {
 	if index >= ll.innerList.Len() {
 		ll.innerList.PushBack(e)
 	} else {
@@ -166,7 +170,11 @@ func (ll *LinkedList) AddAt(index int, e Element) {
 	}
 }
 
-func (ll *LinkedList) AddAllAt(index int, iter Iterable) {
+func (ll *linkedList) AddAllAt(index int, iter Iterable) {
+	if iter == nil {
+		return
+	}
+
 	if index >= ll.innerList.Len() {
 		pos := ll.innerList.Back()
 		for it := iter.GetIterator(); it.HasNext(); {
@@ -185,26 +193,26 @@ func (ll *LinkedList) AddAllAt(index int, iter Iterable) {
 	}
 }
 
-func (ll *LinkedList) GetAt(index int) (Element, bool) {
+func (ll *linkedList) GetAt(index int) (Element, bool) {
 	if pos, ok := ll.indexToElement(index); ok {
 		return pos.Value, true
 	}
 	return nil, false
 }
 
-func (ll *LinkedList) SetAt(index int, e Element) {
+func (ll *linkedList) SetAt(index int, e Element) {
 	if pos, ok := ll.indexToElement(index); ok {
 		pos.Value = e
 	}
 }
 
-func (ll *LinkedList) IndexOf(e Element) int {
+func (ll *linkedList) IndexOf(e Element) int {
 	return ll.IndexIf(func(elem Element, param interface{}) bool {
 		return elem == param
 	}, e)
 }
 
-func (ll *LinkedList) IndexIf(matchMethod MatchMethod, param interface{}) int {
+func (ll *linkedList) IndexIf(matchMethod MatchMethod, param interface{}) int {
 	index := -1
 	for i, it := 0, ll.innerList.Front(); it != nil; {
 		if matchMethod(it.Value, param) {
@@ -217,13 +225,13 @@ func (ll *LinkedList) IndexIf(matchMethod MatchMethod, param interface{}) int {
 	return index
 }
 
-func (ll *LinkedList) LastIndexOf(e Element) int {
+func (ll *linkedList) LastIndexOf(e Element) int {
 	return ll.LastIndexIf(func(elem Element, param interface{}) bool {
 		return elem == param
 	}, e)
 }
 
-func (ll *LinkedList) LastIndexIf(matchMethod MatchMethod, param interface{}) int {
+func (ll *linkedList) LastIndexIf(matchMethod MatchMethod, param interface{}) int {
 	index := -1
 	for i, it := ll.innerList.Len()-1, ll.innerList.Back(); it != nil; {
 		if matchMethod(it.Value, param) {

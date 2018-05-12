@@ -7,10 +7,10 @@
 package collection
 
 // Element represents for any element used in collection
-type Element interface {}
+type Element interface{}
 
 // MatchMethod matches specified element
-type MatchMethod func (e Element, param interface{}) bool
+type MatchMethod func(e Element, param interface{}) bool
 
 // Iterator represents for an iterator over collection.
 type Iterator interface {
