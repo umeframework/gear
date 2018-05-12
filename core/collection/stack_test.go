@@ -43,7 +43,6 @@ func TestStack(t *testing.T) {
 	}
 }
 
-
 func TestStack_2(t *testing.T) {
 	stk := NewStack()
 
@@ -59,8 +58,8 @@ func TestStack_2(t *testing.T) {
 	//t.Log("")
 
 	for i, it := 0, stk.GetIterator(); it.HasNext(); {
-		if e := it.Next(); e != count - i - 1 {
-			t.Errorf("failed to get item from iterator. expected: %v, real: %v", count - i - 1, e)
+		if e := it.Next(); e != count-i-1 {
+			t.Errorf("failed to get item from iterator. expected: %v, real: %v", count-i-1, e)
 		}
 		i++
 	}
@@ -88,20 +87,20 @@ func TestStack_2(t *testing.T) {
 	//t.Log("")
 
 	if stk.Contains(count - 1) {
-		t.Errorf("item found by mistake. %v", count - 1)
+		t.Errorf("item found by mistake. %v", count-1)
 	}
 	if stk.ContainsAll(iter) {
 		t.Errorf("iter found by mistake")
 	}
 
-	for i := 0; i < count - 1; i++ {
-		if e, ok := stk.Peek(); e != count - 2 || !ok {
-			t.Errorf("failed to peek item. expected: %v, real: %v", count - 2, e)
+	for i := 0; i < count-1; i++ {
+		if e, ok := stk.Peek(); e != count-2 || !ok {
+			t.Errorf("failed to peek item. expected: %v, real: %v", count-2, e)
 		}
 	}
-	for i := 0; i < count - 1; i++ {
-		if e, ok := stk.Pop(); e != count - i - 2 || !ok {
-			t.Errorf("failed to poll item. expected: %v, real: %v", count - i - 2, e)
+	for i := 0; i < count-1; i++ {
+		if e, ok := stk.Pop(); e != count-i-2 || !ok {
+			t.Errorf("failed to poll item. expected: %v, real: %v", count-i-2, e)
 		}
 	}
 }

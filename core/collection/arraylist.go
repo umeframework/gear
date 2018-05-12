@@ -200,12 +200,12 @@ func (al *ArrayList) RemoveAt(index int) {
 		var temp []Element
 		if index == 0 {
 			temp = al.array[1:]
-		} else if index == count - 1 {
+		} else if index == count-1 {
 			temp = al.array[:index]
 		} else {
-			temp = make([]Element, count - 1)
+			temp = make([]Element, count-1)
 			copy(temp, al.array[:index])
-			copy(temp[index:], al.array[index + 1:])
+			copy(temp[index:], al.array[index+1:])
 		}
 		al.array = temp
 	}

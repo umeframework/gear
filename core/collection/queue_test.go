@@ -81,18 +81,18 @@ func TestQueue_2(t *testing.T) {
 
 	q.Remove(count - 1)
 	if q.Contains(count - 1) {
-		t.Errorf("item found by mistake. %v", count - 1)
+		t.Errorf("item found by mistake. %v", count-1)
 	}
 	if q.ContainsAll(iter) {
 		t.Errorf("iter found by mistake")
 	}
 
-	for i := 0; i < count - 1; i++ {
+	for i := 0; i < count-1; i++ {
 		if e, ok := q.Peek(); e != 0 || !ok {
 			t.Errorf("failed to peek item. expected: %v, real: %v", 0, e)
 		}
 	}
-	for i := 0; i < count - 1; i++ {
+	for i := 0; i < count-1; i++ {
 		if e, ok := q.Poll(); e != i || !ok {
 			t.Errorf("failed to poll item. expected: %v, real: %v", i, e)
 		}
