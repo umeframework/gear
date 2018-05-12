@@ -106,7 +106,7 @@ func TestArrayList(t *testing.T) {
 	}
 }
 
-func walk(t *testing.T, l List) {
+func walk(t *testing.T, l Iterable) {
 	for i, it := 0, l.GetIterator(); it.HasNext(); {
 		elem := it.Next()
 		t.Logf("no. %v = %v", i, elem)
