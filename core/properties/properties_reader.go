@@ -23,17 +23,23 @@ var (
 	propertiesReaderReplace             = regexp.MustCompile(`\\0|\\\\|\\=|\\[a-tv-z]|\\u[\w\W]{0,4}`)
 )
 
-// PropertiesReader implements Reader interface for properties file format
-type PropertiesReader struct {
+type PropertiesReaderConfig struct {
 }
 
-func NewReader() Reader {
-	return &PropertiesReader{}
+// PropertiesReader implements Reader interface for properties file format
+type propertiesReader struct {
+	config PropertiesReaderConfig
+}
+
+func NewReader(config PropertiesReaderConfig) Reader {
+	return &propertiesReader{
+		config: config,
+	}
 }
 
 // Read() reads (deserialize) a Properties object from reader in properties file format.
 // It reads each valid line to props.
-func (pr *PropertiesReader) Read(p Properties, r io.Reader) error {
+func (pr *propertiesReader) Read(p Properties, r io.Reader) error {
 	reader := bufio.NewReader(r)
 
 	var line string
@@ -71,7 +77,7 @@ func (pr *PropertiesReader) Read(p Properties, r io.Reader) error {
 
 // readLine() reads a valid line from reader.
 // It ignores comments and blank lines, and combines continuous lines linked with ending \.
-func (pr *PropertiesReader) readLine(r *bufio.Reader) (string, error) {
+func (pr *propertiesReader) readLine(r *bufio.Reader) (string, error) {
 	var text string = ""
 	var err error = nil
 	var line string
@@ -106,7 +112,7 @@ func (pr *PropertiesReader) readLine(r *bufio.Reader) (string, error) {
 }
 
 // normalizeLine() normalizes a line (trimming spaces & line carriers)
-func (pr *PropertiesReader) normalizeLine(line string) string {
+func (pr *propertiesReader) normalizeLine(line string) string {
 	normalized := strings.TrimSpace(line)
 	normalized = strings.TrimRight(normalized, "\r\n")
 	return normalized
@@ -114,7 +120,7 @@ func (pr *PropertiesReader) normalizeLine(line string) string {
 
 // isContinuousLine() checks whether there are succeeding lines after specified line.
 // If current line ends with a single \, there are succeeding lines.
-func (pr *PropertiesReader) isContinuousLine(line string) bool {
+func (pr *propertiesReader) isContinuousLine(line string) bool {
 	matched := false
 	if indexes := propertiesReaderRegexContinuousLine.FindStringIndex(line); len(indexes) == 2 {
 		matched = (indexes[1]-indexes[0])%2 == 1
@@ -123,7 +129,7 @@ func (pr *PropertiesReader) isContinuousLine(line string) bool {
 }
 
 // parseKeyValue() extracts key and value settings from a line
-func (pr *PropertiesReader) parseKeyValue(line string) (string, *string, error) {
+func (pr *propertiesReader) parseKeyValue(line string) (string, *string, error) {
 	septPos := -1
 
 	// Find key value separator
@@ -160,14 +166,14 @@ func (pr *PropertiesReader) parseKeyValue(line string) (string, *string, error) 
 }
 
 // isValidSept() checks whether the expression (containing =) is a valid separator between key and value
-func (pr *PropertiesReader) isValidSept(sept string) bool {
+func (pr *propertiesReader) isValidSept(sept string) bool {
 	slackCount := strings.Count(sept, "\\")
 	valid := slackCount%2 == 0
 	return valid
 }
 
 // unescape() converts specified text to unescaped format.
-func (pr *PropertiesReader) unescape(text string) (string, error) {
+func (pr *propertiesReader) unescape(text string) (string, error) {
 	var err error = nil
 	unescaped := propertiesReaderReplace.ReplaceAllStringFunc(text, func(s string) string {
 		ret := s
@@ -200,7 +206,7 @@ func (pr *PropertiesReader) unescape(text string) (string, error) {
 }
 
 // unescapeUnicode() creates an unicode rune from specified string
-func (pr *PropertiesReader) unescapeUnicode(text string) (string, error) {
+func (pr *propertiesReader) unescapeUnicode(text string) (string, error) {
 	r, err := strconv.ParseInt(text, 16, 32)
 	return string(rune(r)), err
 }

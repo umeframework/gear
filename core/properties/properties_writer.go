@@ -17,17 +17,23 @@ var (
 	propertiesWriterRegexMatches = regexp.MustCompile(`=|\\|[[:cntrl:]]|[^[:ascii:]]`)
 )
 
-// PropertiesWriter implements Writer interface for properties file format
-type PropertiesWriter struct {
+type PropertiesWriterConfig struct {
 }
 
-func NewWriter() Writer {
-	return &PropertiesWriter{}
+// PropertiesWriter implements Writer interface for properties file format
+type propertiesWriter struct {
+	config PropertiesWriterConfig
+}
+
+func NewWriter(config PropertiesWriterConfig) Writer {
+	return &propertiesWriter{
+		config: config,
+	}
 }
 
 // Write() writes a Properties object to writer in ini file format.
 // Properties.Props will be written as key-value pairs.
-func (pw *PropertiesWriter) Write(p Properties, w io.Writer) error {
+func (pw *propertiesWriter) Write(p Properties, w io.Writer) error {
 	var err error = nil
 	writer := bufio.NewWriter(w)
 	defer writer.Flush()
@@ -42,7 +48,7 @@ func (pw *PropertiesWriter) Write(p Properties, w io.Writer) error {
 }
 
 // writeKeyValue() writes specified key & value to writer
-func (pw *PropertiesWriter) writeKeyValue(w *bufio.Writer, key Key, value Value) error {
+func (pw *propertiesWriter) writeKeyValue(w *bufio.Writer, key Key, value Value) error {
 	keyText := pw.escape(fmt.Sprintf("%v", key))
 	valueText := pw.escape(fmt.Sprintf("%v", value))
 	_, err := fmt.Fprintln(w, fmt.Sprintf("%s = %s", keyText, valueText))
@@ -50,7 +56,7 @@ func (pw *PropertiesWriter) writeKeyValue(w *bufio.Writer, key Key, value Value)
 }
 
 // escape() returns ini-escaped text for specified input.
-func (pw *PropertiesWriter) escape(text string) string {
+func (pw *propertiesWriter) escape(text string) string {
 	escaped := propertiesWriterRegexMatches.ReplaceAllStringFunc(text, func(s string) string {
 		ret := s
 		switch s {
@@ -74,6 +80,6 @@ func (pw *PropertiesWriter) escape(text string) string {
 }
 
 // escapeUnicode() returns \uxxxx format of specified unicode rune.
-func (pw *PropertiesWriter) escapeUnicode(r rune) string {
+func (pw *propertiesWriter) escapeUnicode(r rune) string {
 	return fmt.Sprintf("\\u%04X", r)
 }

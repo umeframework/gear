@@ -55,7 +55,7 @@ func TestPropertiesWriter(t *testing.T) {
 		}
 		defer file.Close()
 
-		writer := NewWriter()
+		writer := NewWriter(PropertiesWriterConfig{})
 		if err := writer.Write(p, file); err != nil {
 			t.Fatalf("failed to save to ini file (%s). %v", filePath, err)
 		}
@@ -69,7 +69,7 @@ func TestPropertiesWriter(t *testing.T) {
 		}
 		defer file.Close()
 
-		reader := NewReader()
+		reader := NewReader(PropertiesReaderConfig{})
 		p2 := New()
 		if err := reader.Read(p2, file); err != nil {
 			t.Errorf("failed to read file %v. %v", filePath, err)
@@ -91,7 +91,7 @@ func TestPropertiesReader_Invalid(t *testing.T) {
 			}
 			defer file.Close()
 
-			reader := NewReader()
+			reader := NewReader(PropertiesReaderConfig{})
 			p2 := New()
 			if err := reader.Read(p2, file); err == nil {
 				t.Errorf("incorrectly read invalid file %v. %v", filePath, p2)
@@ -108,7 +108,7 @@ func TestPropertiesReader_Extended(t *testing.T) {
 		}
 		defer file.Close()
 
-		reader := NewReader()
+		reader := NewReader(PropertiesReaderConfig{})
 		p2 := New()
 		if err := reader.Read(p2, file); err != nil {
 			t.Errorf("failed to read invalid file %v. %v", filePath, err)
