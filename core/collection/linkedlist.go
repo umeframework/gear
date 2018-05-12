@@ -206,6 +206,12 @@ func (ll *linkedList) SetAt(index int, e Element) {
 	}
 }
 
+func (ll *linkedList) RemoveAt(index int) {
+	if pos, ok := ll.indexToElement(index); ok {
+		ll.innerList.Remove(pos)
+	}
+}
+
 func (ll *linkedList) IndexOf(e Element) int {
 	return ll.IndexIf(func(elem Element, param interface{}) bool {
 		return elem == param

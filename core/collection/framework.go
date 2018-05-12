@@ -65,6 +65,8 @@ type List interface {
 	GetAt(index int) (Element, bool)
 	SetAt(index int, e Element)
 
+	RemoveAt(index int)
+
 	IndexOf(e Element) int
 	IndexIf(matchMethod MatchMethod, param interface{}) int
 	LastIndexOf(e Element) int

@@ -270,3 +270,34 @@ func TestArrayList_4(t *testing.T) {
 		}
 	}
 }
+
+func TestArrayList_5(t *testing.T) {
+	ll := NewArrayList(0, 0x10)
+	count := 5
+	for i := 0; i < count; i++ {
+		ll.Add(i)
+	}
+	//walk(t, ll)
+	//t.Log("")
+
+	ll.RemoveAt(ll.Size() - 1)
+	if e, _ := ll.GetAt(ll.Size() - 1); e != count - 2 {
+		t.Errorf("failed to remove last item. expetected: %v, real: %v", count - 2, e)
+	}
+	//walk(t, ll)
+	//t.Log("")
+
+	ll.RemoveAt(0)
+	if e, _ := ll.GetAt(0); e != 1 {
+		t.Errorf("failed to remove last item. expetected: %v, real: %v", 1, e)
+	}
+	//walk(t, ll)
+	//t.Log("")
+
+	ll.RemoveAt(1)
+	if e, _ := ll.GetAt(1); e != 3 {
+		t.Errorf("failed to remove last item. expetected: %v, real: %v", 3, e)
+	}
+	//walk(t, ll)
+	//t.Log("")
+}
