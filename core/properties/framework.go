@@ -23,6 +23,14 @@ type Properties interface {
 	GetProps() []Key
 }
 
+// KeyValuePair stands for a simple key-value pair (item)
+type KeyValuePair interface {
+	GetKey() Key
+	SetKey(key Key)
+	GetValue() Value
+	SetValue(value Value)
+}
+
 // Reader interface reads (serializes) Properties from io.Reader
 type Reader interface {
 	Read(p Properties, r io.Reader) error

@@ -26,3 +26,17 @@ func ToMap(target map[Key]Value, source Properties) {
 		}
 	}
 }
+
+func ToKeyValueSet(source Properties) []KeyValuePair {
+	keys := source.GetProps()
+	count := len(keys)
+	ret := make([]KeyValuePair, count)
+	for index, key := range keys {
+		value, _ := source.GetProp(key)
+		kv := NewKeyValuePair()
+		kv.SetKey(key)
+		kv.SetValue(value)
+		ret[index] = kv
+	}
+	return ret
+}
