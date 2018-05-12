@@ -90,3 +90,9 @@ type Stack interface {
 	Peek() (Element, bool)
 	Pop() (Element, bool)
 }
+
+// Set represents a collection which does not contain duplicate elements.
+// Notice that the iterator returns different order if new elements are added.
+type Set interface {
+	Collection
+}
