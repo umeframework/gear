@@ -14,17 +14,33 @@ func Contains(iter Iterable, e Element) bool {
 
 func ContainsIf(iter Iterable, matchMethod MatchMethod, param interface{}) bool {
 	found := false
-	if col, ok := iter.(Collection); ok {
-		found = col.ContainsIf(matchMethod, param)
-	} else {
-		for it := iter.GetIterator(); it.HasNext(); {
-			if matchMethod(it.Next(), param) {
-				found = true
-				break
-			}
+	for it := iter.GetIterator(); it.HasNext(); {
+		if matchMethod(it.Next(), param) {
+			found = true
+			break
 		}
 	}
 	return found
 }
 
+func ToArray(iter Iterable) []Element {
+	array := make([]Element, 0, 0x10)
+	for it := iter.GetIterator(); it.HasNext(); {
+		e := it.Next()
+		array = append(array, e)
+	}
+	return array
+}
 
+func FromArray(elements ...Element) List {
+	return &ArrayList{
+		array: elements[:],
+	}
+}
+
+func AddArray(list List, elements ...Element) {
+	if list != nil {
+		elementList := FromArray(elements...)
+		list.AddAll(elementList)
+	}
+}

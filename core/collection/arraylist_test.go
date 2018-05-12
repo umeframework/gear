@@ -236,3 +236,37 @@ func TestArrayList_3(t *testing.T) {
 		}
 	}
 }
+
+func TestArrayList_4(t *testing.T) {
+	ll := FromArray(0, 2, 4, 6, 8)
+	count := ll.Size()
+	if count != 5 {
+		t.Errorf("failed to create from array. count = %v", count)
+	} else {
+		for i := 0; i < count; i++ {
+			if e, ok := ll.GetAt(i); e != i * 2 || !ok {
+				t.Errorf("failed to create from array. index = %v, expected = %v, real = %v",
+					i, i * 2, e)
+			}
+		}
+	}
+
+	AddArray(ll, 1, 3, 5, 7, 9)
+	count2 := ll.Size()
+	if count2 != count + 5 {
+		t.Errorf("failed to add array. count = %v", count2)
+	} else {
+		for i := 0; i < count; i++ {
+			if e, ok := ll.GetAt(i); e != i * 2 || !ok {
+				t.Errorf("failed to create from array. index = %v, expected = %v, real = %v",
+					i, i * 2, e)
+			}
+		}
+		for i := count; i < count2; i++ {
+			if e, ok := ll.GetAt(i); e != (i - count) * 2 + 1 || !ok {
+				t.Errorf("failed to create from array. index = %v, expected = %v, real = %v",
+					i, (i - count) * 2 + 1, e)
+			}
+		}
+	}
+}
