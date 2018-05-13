@@ -70,7 +70,7 @@ func (stk *stack) Size() int {
 }
 
 func (stk *stack) Push(e Element) {
-	stk.list.Add(e)
+	stk.list.AddAt(0, e)
 }
 
 func (stk *stack) Peek() (Element, bool) {
