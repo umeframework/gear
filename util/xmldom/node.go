@@ -6,7 +6,7 @@
 
 package xmldom
 
-import "github.com/umeframework/gear/core/collection"
+import "github.com/umeframework/gear/util/collection"
 
 type nodeSetter interface {
 	SetDocument(document Document)

@@ -8,9 +8,9 @@ package xmldom
 
 import (
 	"encoding/xml"
+	"errors"
 	"fmt"
-	"github.com/kataras/iris/core/errors"
-	"github.com/umeframework/gear/core/collection"
+	"github.com/umeframework/gear/util/collection"
 	"io"
 	"strings"
 )

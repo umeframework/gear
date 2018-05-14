@@ -7,8 +7,8 @@
 package config
 
 import (
-	"github.com/umeframework/gear/core/collection"
 	"github.com/umeframework/gear/core/properties"
+	"github.com/umeframework/gear/util/collection"
 )
 
 type configImpl struct {

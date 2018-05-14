@@ -9,7 +9,7 @@ package xmldom
 import (
 	"bytes"
 	"fmt"
-	"github.com/umeframework/gear/core/collection"
+	"github.com/umeframework/gear/util/collection"
 )
 
 type attributeImpl struct {
