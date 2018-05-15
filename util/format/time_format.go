@@ -34,7 +34,6 @@ var (
 		"AM": "PM",
 	}
 	ErrorInvalidFormatInput = errors.New("invalid object to format, only time is supported")
-	ErrorInvalidParseInput  = errors.New("invalid object to format, only time is supported")
 )
 
 type TimeFormat struct {
