@@ -6,6 +6,8 @@
 
 package cache
 
+import "time"
+
 type Key interface{}
 type Value interface{}
 type Param interface{}
@@ -26,4 +28,13 @@ type CacheManager interface {
 	RemoveCache(name string) error
 	ClearCaches() error
 	GetCacheNames() []string
+}
+
+type ExpirableCache interface {
+	Cache
+	GetLastAccessTime() time.Time
+	SetLastAccessTime(lastAccess time.Time)
+	GetMaxIdleTime() time.Duration
+	SetMaxIdleTime(maxIdle time.Duration)
+	IsExpired() bool
 }
