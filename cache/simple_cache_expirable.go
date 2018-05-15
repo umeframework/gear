@@ -7,27 +7,27 @@
 package cache
 
 import (
-	"time"
 	"sync"
+	"time"
 )
 
 type simpleCacheExpirable struct {
-	name  string
-	dict  map[Key]Value
+	name string
+	dict map[Key]Value
 
 	lastAccessTime time.Time
-	maxIdle time.Duration
-	expiresOn time.Time
+	maxIdle        time.Duration
+	expiresOn      time.Time
 
 	mutex sync.Mutex
 }
 
 func NewSimpleCacheExpirable(name string, maxIdle time.Duration) ExpirableCache {
 	cache := simpleCacheExpirable{
-		name: name,
-		dict: make(map[Key]Value),
+		name:    name,
+		dict:    make(map[Key]Value),
 		maxIdle: maxIdle,
-		mutex: sync.Mutex{},
+		mutex:   sync.Mutex{},
 	}
 	cache.updateLastAccessTime(nil)
 	return &cache
