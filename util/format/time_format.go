@@ -7,31 +7,31 @@
 package format
 
 import (
-	"regexp"
 	"errors"
-	"time"
+	"regexp"
 	"strings"
+	"time"
 )
 
 var (
-	TimeFormatRegex = regexp.MustCompile(`(y+|M+|d+|H+|h+|m+|S+|s+|AM|am)`)
-	TimeFormatPatternDict = map[string]string {
-		"yy": "06",
+	TimeFormatRegex       = regexp.MustCompile(`(y+|M+|d+|H+|h+|m+|S+|s+|AM|am)`)
+	TimeFormatPatternDict = map[string]string{
+		"yy":   "06",
 		"yyyy": "2006",
-		"M": "1",
-		"MM": "01",
-		"d": "2",
-		"dd": "02",
-		"h": "3",
-		"hh": "03",
-		"H": "15",
-		"HH": "15",
-		"m": "4",
-		"mm": "04",
-		"s": "5",
-		"ss": "05",
-		"am": "pm",
-		"AM": "PM",
+		"M":    "1",
+		"MM":   "01",
+		"d":    "2",
+		"dd":   "02",
+		"h":    "3",
+		"hh":   "03",
+		"H":    "15",
+		"HH":   "15",
+		"m":    "4",
+		"mm":   "04",
+		"s":    "5",
+		"ss":   "05",
+		"am":   "pm",
+		"AM":   "PM",
 	}
 	ErrorInvalidFormatInput = errors.New("invalid object to format, only time is supported")
 )
@@ -76,6 +76,6 @@ func (tf *TimeFormat) normalizePattern(pattern string) string {
 
 func (tf *TimeFormat) Parse(text string) (interface{}, error) {
 	pattern := tf.normalizePattern(tf.Pattern)
-	tm, err := time.Parse(pattern, text)
+	tm, err := time.ParseInLocation(pattern, text, time.Local)
 	return tm, err
 }

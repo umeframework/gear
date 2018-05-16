@@ -6,10 +6,21 @@
 
 package format
 
+type FormatContext interface {
+}
+
+type Formatable interface {
+	Format(format string) (string, error)
+}
+
+type Parsable interface {
+	Parse(text string) (interface{}, error)
+}
+
 type Formatter interface {
-	Format(object interface{}) (string, error)
+	Format(object interface{}, context FormatContext) (string, error, bool)
 }
 
 type Parser interface {
-	Parse(text string) (interface{}, error)
+	Parse(text string, context FormatContext) (interface{}, error, bool)
 }
